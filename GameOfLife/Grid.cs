@@ -140,53 +140,20 @@ namespace GameOfLife
         
         public void Update()
         {
-            var alive = false;
-            var age = 0;
-
             for (var i = 0; i < _sizeX; i++)
             {
                 for (var j = 0; j < _sizeY; j++)
                 {
-//                    nextGenerationCells[i, j] = CalculateNextGeneration(i,j);          // UNOPTIMIZED
-                    CalculateNextGeneration(i, j, ref alive, ref age);   // OPTIMIZED
-                    _nextGenerationCells[i, j].IsAlive = alive;  // OPTIMIZED
-                    _nextGenerationCells[i, j].Age = age;  // OPTIMIZED
+                    CalculateNextGeneration(i, j);   // OPTIMIZED
                 }
             }
             UpdateToNextGeneration();
         }
 
-        public Cell CalculateNextGeneration(int row, int column)    // UNOPTIMIZED
+        public void CalculateNextGeneration(int row, int column)     // OPTIMIZED
         {
-            bool alive;
-            int count, age;
-
-            alive = _cells[row, column].IsAlive;
-            age = _cells[row, column].Age;
-            count = CountNeighbors(row, column);
-
-            if (alive && count < 2)
-                return new Cell(row, column, 0, false);
-            
-            if (alive && (count == 2 || count == 3))
-            {
-                _cells[row, column].Age++;
-                return new Cell(row, column, _cells[row, column].Age, true);
-            }
-
-            if (alive && count > 3)
-                return new Cell(row, column, 0, false);
-            
-            if (!alive && count == 3)
-                return new Cell(row, column, 0, true);
-            
-            return new Cell(row, column, 0, false);
-        }
-
-        public void CalculateNextGeneration(int row, int column, ref bool isAlive, ref int age)     // OPTIMIZED
-        {
-            isAlive = _cells[row, column].IsAlive;
-            age = _cells[row, column].Age;
+            bool isAlive = _cells[row, column].IsAlive;
+            int age = _cells[row, column].Age;
 
             int count = CountNeighbors(row, column);
 
@@ -214,6 +181,9 @@ namespace GameOfLife
                 isAlive = true;
                 age = 0;
             }
+
+            _nextGenerationCells[row, column].IsAlive = isAlive;
+            _nextGenerationCells[row, column].Age = age;
         }
 
         public int CountNeighbors(int i, int j)
