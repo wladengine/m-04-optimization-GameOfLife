@@ -146,11 +146,6 @@ namespace GameOfLife
         {
             for (var i = 0; i < _sizeX; i++)
             {
-                int row = i;
-                //Parallel.For(0, _sizeY, j =>
-                //{
-                //    CalculateNextGeneration(row, j);
-                //});
                 for (var j = 0; j < _sizeY; j++)
                 {
                     CalculateNextGeneration(i, j);   // OPTIMIZED
