@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Threading;
 
 namespace GameOfLife
@@ -64,7 +65,11 @@ namespace GameOfLife
 
         private void OnTimer(object sender, EventArgs e)
         {
-            _mainGrid.Update();
+            using (Dispatcher.DisableProcessing())
+            {
+                _mainGrid.Update();
+            }
+
             _genCounter++;
             lblGenCount.Content = "Generations: " + _genCounter;
         }
