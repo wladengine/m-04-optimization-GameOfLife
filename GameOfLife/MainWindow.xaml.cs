@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -76,6 +77,13 @@ namespace GameOfLife
         private void ButtonClear_Click(object sender, RoutedEventArgs e)
         {
             _mainGrid.Clear();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _mainGrid.ReleaseGrid();
+
+            base.OnClosing(e);
         }
     }
 }

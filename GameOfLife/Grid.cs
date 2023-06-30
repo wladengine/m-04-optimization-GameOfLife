@@ -55,6 +55,18 @@ namespace GameOfLife
             }
         }
 
+        public void ReleaseGrid()
+        {
+            for (var i = 0; i < _sizeX; i++)
+            {
+                for (var j = 0; j < _sizeY; j++)
+                {
+                    _cellsVisuals[i, j].MouseMove -= MouseMove;
+                    _cellsVisuals[i, j].MouseLeftButtonDown -= MouseMove;
+                }
+            }
+        }
+
         private void MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed) 
@@ -118,6 +130,8 @@ namespace GameOfLife
 
             UpdateGraphics();
         }
+
+
 
         public static bool GetRandomBoolean()
         {
