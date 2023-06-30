@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -64,7 +65,11 @@ namespace GameOfLife
 
         private void OnTimer(object sender, EventArgs e)
         {
-            _mainGrid.Update();
+            using (Dispatcher.DisableProcessing())
+            {
+                _mainGrid.Update();
+            }
+
             _genCounter++;
             lblGenCount.Content = "Generations: " + _genCounter;
         }
@@ -72,6 +77,13 @@ namespace GameOfLife
         private void ButtonClear_Click(object sender, RoutedEventArgs e)
         {
             _mainGrid.Clear();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _mainGrid.ReleaseGrid();
+
+            base.OnClosing(e);
         }
     }
 }
